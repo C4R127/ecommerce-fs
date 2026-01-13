@@ -1,0 +1,209 @@
+.contenedor {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  text-align: center;
+  font-family: sans-serif;
+}
+
+.grilla-productos {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.tarjeta {
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 15px;
+  width: 250px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  transition: transform 0.2s;
+}
+
+.tarjeta:hover {
+  transform: translateY(-5px);
+}
+
+.imagen-producto {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 5px;
+}
+
+.precio {
+  font-weight: bold;
+  color: #2ecc71;
+  font-size: 1.2rem;
+}
+
+button {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #2980b9;
+}
+
+/* Agrega esto al final de tu archivo App.css */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  border-bottom: 2px solid #f0f0f0;
+  padding-bottom: 20px;
+}
+
+.carrito-resumen {
+  background-color: #f8f9fa;
+  color: #333333; /* Forzamos color negro para que se lea */
+  padding: 15px 25px; /* Un poco más de espacio */
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  text-align: right;
+  font-size: 0.9rem;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2); /* Sombrita para resaltar */
+}
+
+/* Estilos para el Formulario */
+.formulario-admin {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  margin-bottom: 30px;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+  color: #000000 !important; /* <--- ESTO ES LA CLAVE (Negro puro) */
+  font-weight: 500; /* Un poquito más gordita la letra para que se lea mejor */
+}
+
+.inputs-container {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap; /* Para que baje de línea en celulares */
+}
+
+.formulario-admin input {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  flex: 1; /* Para que ocupen espacio equitativo */
+  min-width: 150px;
+}
+
+.formulario-admin button {
+  background-color: #27ae60; /* Verde para guardar */
+}
+
+.formulario-admin button:hover {
+  background-color: #219150;
+}
+
+.acciones {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.btn-eliminar {
+    background-color: #e74c3c; /* Rojo peligro */
+}
+
+.btn-eliminar:hover {
+    background-color: #c0392b;
+}
+
+/* Cabecera más organizada */
+.panel-control {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+/* Botón especial para cambiar de rol */
+.btn-rol {
+    background-color: #34495e;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    border: 2px solid #2c3e50;
+}
+.btn-rol:hover {
+    background-color: #2c3e50;
+}
+
+/* Título de sección admin */
+.titulo-admin {
+    text-align: center;
+    color: #e67e22; /* Naranja para resaltar que es zona admin */
+    margin-bottom: 10px;
+}
+
+/* Botón de Editar (Amarillo/Naranja) */
+.btn-editar {
+    background-color: #f39c12;
+    color: white;
+    margin-right: 5px;
+}
+.btn-editar:hover {
+    background-color: #d35400;
+}
+
+/* Estilos para el Historial de Ventas */
+.historial-ventas {
+  margin-top: 30px;
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+  color: #000000 !important; /* <--- ESTO ES LA CLAVE (Negro puro) */
+  font-weight: 500; /* Un poquito más gordita la letra para que se lea mejor */
+}
+
+.tabla-pedidos {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.tabla-pedidos th, .tabla-pedidos td {
+  border-bottom: 1px solid #eee;
+  padding: 12px;
+  text-align: left;
+  color: #000000 !important; /* <--- ESTO ES LA CLAVE (Negro puro) */
+  font-weight: 500; /* Un poquito más gordita la letra para que se lea mejor */
+}
+
+.tabla-pedidos th {
+  background-color: #f8f9fa;
+  color: #333;
+}
+
+.total-venta {
+  color: #27ae60;
+  font-weight: bold;
+}
+
+.lista-items-venta {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: 0.85rem;
+  color: #555;
+}
