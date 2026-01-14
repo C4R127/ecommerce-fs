@@ -2,6 +2,7 @@ package com.example.ecommerce.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonFormat; // Asegúrate de tener este import
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -12,10 +13,16 @@ public class Pedido {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime fecha;
+
     private Double total;
 
-    // Un pedido puede tener muchos productos (Relación simple para empezar)
     @ManyToMany
     private List<Producto> productos;
+
+    // --- NUEVO: Relación con Usuario ---
+    @ManyToOne
+    @JoinColumn(name = "usuario_id") // Crea una columna 'usuario_id' en la tabla Pedido
+    private Usuario usuario;
 }

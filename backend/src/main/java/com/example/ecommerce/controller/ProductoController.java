@@ -31,4 +31,11 @@ public class ProductoController {
     public void eliminar(@PathVariable Long id) {
         repositorio.deleteById(id);
     }
+    // 4. Actualizar un producto existente (PUT)
+    @PutMapping("/{id}")
+    public Producto actualizar(@PathVariable Long id, @RequestBody Producto producto) {
+        // Forzamos que el ID del producto sea el que viene en la URL
+        producto.setId(id);
+        return repositorio.save(producto); // .save() sirve para crear Y para actualizar
+    }
 }

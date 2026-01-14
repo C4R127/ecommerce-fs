@@ -1,198 +1,124 @@
-.contenedor {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px;
-  text-align: center;
-  font-family: sans-serif;
+/* =========================================
+   1. RESET Y ESTRUCTURA GENERAL (LAYOUT)
+   ========================================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-.grilla-productos {
-  display: flex;
-  gap: 20px;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-
-.tarjeta {
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  padding: 15px;
-  width: 250px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-  transition: transform 0.2s;
-}
-
-.tarjeta:hover {
-  transform: translateY(-5px);
-}
-
-.imagen-producto {
+/* IMPORTANTE: Quitamos el flex y el centrado del body para que ocupe toda la pantalla */
+body {
+  background-color: #f4f6f9; /* Fondo gris claro profesional */
+  min-height: 100vh;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   width: 100%;
-  height: 150px;
-  object-fit: cover;
-  border-radius: 5px;
+  overflow-x: hidden; /* Evita scroll horizontal */
 }
 
-.precio {
-  font-weight: bold;
-  color: #2ecc71;
-  font-size: 1.2rem;
+#root {
+  width: 100%;
+  height: 100%;
 }
 
-button {
-  background-color: #3498db;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-button:hover {
-  background-color: #2980b9;
-}
-
-/* Agrega esto al final de tu archivo App.css */
-header {
+/* --- ESTRUCTURA DEL DASHBOARD (Navbar + Sidebar + Contenido) --- */
+.app-layout {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 30px;
-  border-bottom: 2px solid #f0f0f0;
-  padding-bottom: 20px;
+  flex-direction: column;
+  height: 100vh; /* Ocupa toda la altura de la ventana */
 }
 
-.carrito-resumen {
-  background-color: #f8f9fa;
-  color: #333333; /* Forzamos color negro para que se lea */
-  padding: 15px 25px; /* Un poco más de espacio */
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  text-align: right;
-  font-size: 0.9rem;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.2); /* Sombrita para resaltar */
+.main-content-wrapper {
+  display: flex;
+  flex: 1; /* Ocupa el espacio restante debajo del Navbar */
+  background-color: #f4f6f9;
+  overflow: hidden; /* El scroll lo maneja el hijo (.contenido-pagina) */
 }
 
-/* Estilos para el Formulario */
+/* El área donde se ven los productos y tablas */
+.contenido-pagina {
+  flex: 1;
+  padding: 30px;
+  overflow-y: auto; /* Scroll vertical solo aquí */
+  width: 100%;
+}
+
+/* =========================================
+   2. ESTILOS DE COMPONENTES (Tarjetas, Tablas, etc.)
+   ========================================= */
+
+/* --- SECCIÓN ADMIN --- */
+.titulo-admin {
+  text-align: left; /* Cambiado a izquierda para dashboard */
+  color: #2c3e50;
+  font-size: 1.8rem;
+  margin-bottom: 25px;
+  font-weight: 700;
+  border-bottom: 2px solid #e2e8f0;
+  padding-bottom: 10px;
+}
+
+/* --- FORMULARIO --- */
 .formulario-admin {
-  background-color: #ffffff;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  background: white;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
   margin-bottom: 30px;
-  max-width: 800px;
-  margin-left: auto;
-  margin-right: auto;
-  color: #000000 !important; /* <--- ESTO ES LA CLAVE (Negro puro) */
-  font-weight: 500; /* Un poquito más gordita la letra para que se lea mejor */
+  max-width: 100%; /* Ocupa el ancho disponible */
 }
 
 .inputs-container {
   display: flex;
-  gap: 10px;
-  justify-content: center;
-  flex-wrap: wrap; /* Para que baje de línea en celulares */
+  gap: 15px;
+  flex-wrap: wrap;
 }
 
 .formulario-admin input {
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  flex: 1; /* Para que ocupen espacio equitativo */
-  min-width: 150px;
+  padding: 12px 18px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  flex: 1;
+  min-width: 200px;
+  background-color: #f8fafc;
 }
 
-.formulario-admin button {
-  background-color: #27ae60; /* Verde para guardar */
+.formulario-admin input:focus {
+  outline: none;
+  border-color: #3498db;
+  background-color: white;
 }
 
-.formulario-admin button:hover {
-  background-color: #219150;
-}
-
-.acciones {
-    display: flex;
-    gap: 10px;
-    justify-content: center;
-    margin-top: 10px;
-}
-
-.btn-eliminar {
-    background-color: #e74c3c; /* Rojo peligro */
-}
-
-.btn-eliminar:hover {
-    background-color: #c0392b;
-}
-
-/* Cabecera más organizada */
-.panel-control {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-}
-
-/* Botón especial para cambiar de rol */
-.btn-rol {
-    background-color: #34495e;
-    color: white;
-    padding: 8px 15px;
-    border-radius: 20px;
-    font-size: 0.9rem;
-    border: 2px solid #2c3e50;
-}
-.btn-rol:hover {
-    background-color: #2c3e50;
-}
-
-/* Título de sección admin */
-.titulo-admin {
-    text-align: center;
-    color: #e67e22; /* Naranja para resaltar que es zona admin */
-    margin-bottom: 10px;
-}
-
-/* Botón de Editar (Amarillo/Naranja) */
-.btn-editar {
-    background-color: #f39c12;
-    color: white;
-    margin-right: 5px;
-}
-.btn-editar:hover {
-    background-color: #d35400;
-}
-
-/* Estilos para el Historial de Ventas */
+/* --- HISTORIAL DE VENTAS (TABLAS) --- */
 .historial-ventas {
-  margin-top: 30px;
   background: white;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-  max-width: 800px;
-  margin-left: auto;
-  margin-right: auto;
-  color: #000000 !important; /* <--- ESTO ES LA CLAVE (Negro puro) */
-  font-weight: 500; /* Un poquito más gordita la letra para que se lea mejor */
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  margin-top: 30px;
+  overflow-x: auto; /* Por si la tabla es muy ancha */
 }
 
 .tabla-pedidos {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 10px;
-}
-
-.tabla-pedidos th, .tabla-pedidos td {
-  border-bottom: 1px solid #eee;
-  padding: 12px;
-  text-align: left;
-  color: #000000 !important; /* <--- ESTO ES LA CLAVE (Negro puro) */
-  font-weight: 500; /* Un poquito más gordita la letra para que se lea mejor */
+  margin-top: 15px;
 }
 
 .tabla-pedidos th {
-  background-color: #f8f9fa;
-  color: #333;
+  background-color: #f1f2f6;
+  color: #576574;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  padding: 15px;
+  text-align: left;
+}
+
+.tabla-pedidos td {
+  padding: 15px;
+  border-bottom: 1px solid #eee;
+  color: #2d3748;
 }
 
 .total-venta {
@@ -202,8 +128,111 @@ header {
 
 .lista-items-venta {
   list-style: none;
-  padding: 0;
-  margin: 0;
   font-size: 0.85rem;
-  color: #555;
+  color: #7f8c8d;
+}
+
+/* --- GRILLA DE PRODUCTOS --- */
+.grilla-productos {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Adaptable */
+  gap: 25px;
+  padding-bottom: 40px;
+}
+
+.tarjeta {
+  background: white;
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s, box-shadow 0.2s;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.tarjeta:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.imagen-producto {
+  width: 100%;
+  height: 180px;
+  object-fit: contain; /* Para que se vea la foto entera */
+  margin-bottom: 15px;
+  background-color: #fff;
+}
+
+.tarjeta h3 {
+  font-size: 1.1rem;
+  color: #2c3e50;
+  margin: 10px 0;
+}
+
+.precio {
+  font-size: 1.4rem;
+  color: #27ae60;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+/* --- BOTONES --- */
+button {
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+
+/* Botón Genérico (Agregar al carrito) */
+.tarjeta button {
+  background-color: #3498db;
+  color: white;
+  width: 100%;
+}
+.tarjeta button:hover { background-color: #2980b9; }
+
+/* Botón Guardar (Formulario) */
+.formulario-admin button {
+  background-color: #27ae60;
+  color: white;
+}
+.formulario-admin button:hover { background-color: #219150; }
+
+/* Botones de Acción (Editar/Borrar) */
+.acciones {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-editar {
+  background-color: #f39c12;
+  color: white;
+  flex: 1;
+}
+.btn-editar:hover { background-color: #d35400; }
+
+.btn-eliminar {
+  background-color: #c0392b;
+  color: white;
+  flex: 1;
+}
+.btn-eliminar:hover { background-color: #a93226; }
+
+/* --- RESPONSIVE --- */
+@media (max-width: 768px) {
+  .app-layout {
+    flex-direction: column;
+  }
+  
+  .sidebar {
+    display: none; /* En móviles ocultamos sidebar por simplicidad */
+  }
+
+  .contenido-pagina {
+    padding: 15px;
+  }
 }
