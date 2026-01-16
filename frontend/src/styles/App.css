@@ -236,3 +236,35 @@ button {
     padding: 15px;
   }
 }
+
+/* --- ESTILOS ESPECÍFICOS DEL PANEL DE PRODUCTOS --- */
+
+.admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+/* Forzamos que el título no tenga margen inferior dentro de este header */
+.admin-header .titulo-admin {
+  margin-bottom: 0;
+}
+
+.btn-importar {
+  background-color: #8e44ad;
+  color: white;
+  font-size: 0.9rem;
+  /* El padding y border-radius lo hereda de los estilos generales de 'button' */
+}
+
+.btn-importar:hover {
+  background-color: #732d91; /* Un morado un poco más oscuro */
+  transform: translateY(-2px);
+}
+
+.admin-divider {
+  margin: 20px 0;
+  border: 0;
+  border-top: 1px solid #e0e0e0; /* Una línea gris suave */
+}

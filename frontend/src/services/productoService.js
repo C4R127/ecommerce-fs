@@ -101,3 +101,18 @@ export const actualizarProducto = async (id, producto) => {
     return null;
   }
 };
+
+// ... tus otras funciones ...
+
+export const importarProductosDemo = async () => {
+  try {
+    const response = await fetch(`${API_URL}/importar`, {
+      method: "POST",
+    });
+    // Este endpoint devuelve un texto simple, no JSON
+    return await response.text(); 
+  } catch (error) {
+    console.error("Error importando:", error);
+    return null;
+  }
+};

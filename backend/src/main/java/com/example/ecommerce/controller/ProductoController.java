@@ -4,38 +4,79 @@ import com.example.ecommerce.model.Producto;
 import com.example.ecommerce.repository.ProductoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate; // Importante para llamar a la API externa
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/productos")           // Define la URL base: http://localhost:8080/api/productos
-@CrossOrigin(origins = "http://localhost:5173") // ¡IMPORTANTE! Permite que React (puerto 5173) nos pida datos
+@RequestMapping("/api/productos")
+@CrossOrigin(origins = "http://localhost:5173")
 public class ProductoController {
 
     @Autowired
-    private ProductoRepository repositorio;
+    private ProductoRepository productoRepository;
 
-    // 1. Obtener todos los productos (GET)
     @GetMapping
-    public List<Producto> listarProductos() {
-        return repositorio.findAll();
+    public Iterable<Producto> obtenerProductos() {
+        return productoRepository.findAll();
     }
 
-    // 2. Guardar un producto nuevo (POST)
     @PostMapping
-    public Producto guardarProducto(@RequestBody Producto producto) {
-        return repositorio.save(producto);
+    public Producto crearProducto(@RequestBody Producto producto) {
+        return productoRepository.save(producto);
     }
-    // 3. Borrar un producto por ID (DELETE)
-    @DeleteMapping("/{id}")
-    public void eliminar(@PathVariable Long id) {
-        repositorio.deleteById(id);
-    }
-    // 4. Actualizar un producto existente (PUT)
+
     @PutMapping("/{id}")
-    public Producto actualizar(@PathVariable Long id, @RequestBody Producto producto) {
-        // Forzamos que el ID del producto sea el que viene en la URL
-        producto.setId(id);
-        return repositorio.save(producto); // .save() sirve para crear Y para actualizar
+    public Producto actualizarProducto(@PathVariable Long id, @RequestBody Producto productoDetalles) {
+        Producto producto = productoRepository.findById(id).orElse(null);
+        if (producto != null) {
+            producto.setNombre(productoDetalles.getNombre());
+            producto.setPrecio(productoDetalles.getPrecio());
+            producto.setImagenUrl(productoDetalles.getImagenUrl());
+            return productoRepository.save(producto);
+        }
+        return null;
+    }
+
+    @DeleteMapping("/{id}")
+    public void eliminarProducto(@PathVariable Long id) {
+        productoRepository.deleteById(id);
+    }
+
+    // --- NUEVO: ENDPOINT PARA IMPORTAR DESDE API EXTERNA ---
+    @PostMapping("/importar")
+    public String importarDesdeFakeStore() {
+        String url = "https://fakestoreapi.com/products";
+        RestTemplate restTemplate = new RestTemplate();
+
+        // 1. Descargamos los datos de la API externa
+        FakeProductDTO[] productosExternos = restTemplate.getForObject(url, FakeProductDTO[].class);
+
+        if (productosExternos == null) return "Error al conectar con la API";
+
+        // 2. Convertimos y guardamos en NUESTRA base de datos
+        List<Producto> nuevosProductos = new ArrayList<>();
+
+        for (FakeProductDTO fake : productosExternos) {
+            Producto p = new Producto();
+            p.setNombre(fake.title); // Mapeamos 'title' a 'nombre'
+            p.setPrecio(fake.price);
+            p.setImagenUrl(fake.image); // Mapeamos 'image' a 'imagenUrl'
+
+            nuevosProductos.add(p);
+        }
+
+        productoRepository.saveAll(nuevosProductos);
+        return "¡Éxito! Se importaron " + nuevosProductos.size() + " productos.";
+    }
+
+    // Clase auxiliar para leer el formato de FakeStoreAPI
+    // (Tiene que ser estática para usarse aquí dentro)
+    static class FakeProductDTO {
+        public String title;
+        public Double price;
+        public String image;
+        // Ignoramos descripción y categoría por ahora
     }
 }

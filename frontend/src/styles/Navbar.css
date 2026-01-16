@@ -63,3 +63,52 @@
   padding: 2px 6px;
   border-radius: 50%;
 }
+
+/* --- AGREGA ESTO AL FINAL DE TU ARCHIVO NAVBAR.CSS --- */
+
+/* Contenedor para centrar la barra */
+.search-container {
+    flex: 1; /* Ocupa el espacio sobrante en el medio */
+    display: flex;
+    justify-content: center;
+    margin: 0 20px;
+}
+
+/* El input de búsqueda */
+.search-input {
+    width: 100%;
+    max-width: 400px; /* Que no sea gigante */
+    padding: 8px 15px;
+    border-radius: 20px;
+    border: none;
+    background-color: rgba(255, 255, 255, 0.2); /* Transparente blanco */
+    color: white;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    outline: none;
+}
+
+/* Placeholder color suave */
+.search-input::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+/* Efecto al hacer clic */
+.search-input:focus {
+    background-color: white;
+    color: #333;
+    box-shadow: 0 0 10px rgba(255,255,255,0.3);
+}
+.search-input:focus::placeholder {
+    color: #aaa;
+}
+
+/* Ocultar email en móviles para que quepa la barra */
+@media (max-width: 768px) {
+    .desktop-only {
+        display: none;
+    }
+    .search-input {
+        max-width: 150px; /* Más pequeña en celular */
+    }
+}

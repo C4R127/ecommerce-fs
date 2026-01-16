@@ -1,6 +1,7 @@
-import "../styles/Navbar.css"; // Crearemos este estilo en el paso 3
+import "../styles/Navbar.css";
 
-function Navbar({ usuario, onLogout, carritoCount, toggleCarrito }) {
+// Recibimos 'onSearch' como prop nueva
+function Navbar({ usuario, onLogout, carritoCount, toggleCarrito, onSearch }) {
   const esAdmin = usuario?.rol === "ADMIN";
 
   return (
@@ -10,15 +11,25 @@ function Navbar({ usuario, onLogout, carritoCount, toggleCarrito }) {
         <h1>Tienda de {usuario.nombre}</h1>
       </div>
 
+      {/* NUEVO: BARRA DE BÚSQUEDA CENTRAL */}
+      <div className="search-container">
+        <input 
+          type="text" 
+          placeholder="🔍 Buscar productos..." 
+          onChange={(e) => onSearch(e.target.value)} // Al escribir, actualizamos App.jsx
+          className="search-input"
+        />
+      </div>
+
       <div className="navbar-actions">
         <div className="user-info">
           <span className="role-badge">
             {esAdmin ? "👮‍♂️ Admin" : "👤 Cliente"}
           </span>
-          <span className="user-email">{usuario.email}</span>
+          {/* Ocultamos el email en pantallas chicas para dar espacio a la barra */}
+          <span className="user-email desktop-only">{usuario.email}</span>
         </div>
 
-        {/* Solo mostramos el carrito si NO es admin */}
         {!esAdmin && (
           <button className="btn-icon" onClick={toggleCarrito}>
             🛒 <span className="badge">{carritoCount}</span>

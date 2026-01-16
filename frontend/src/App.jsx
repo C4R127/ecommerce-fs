@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { obtenerProductos, eliminarProducto, crearPedido, obtenerPedidos } from "./services/productoService";
+// IMPORTANTE: Agregamos 'importarProductosDemo' a los imports
+import { obtenerProductos, eliminarProducto, crearPedido, obtenerPedidos, importarProductosDemo } from "./services/productoService";
 import Formulario from "./components/Formulario";
 import Carrito from "./components/Carrito";
 import Login from "./components/Login";
@@ -10,25 +11,30 @@ import "./styles/App.css";
 function App() {
   const [usuario, setUsuario] = useState(null);
   
-  // --- 1. NUEVO ESTADO PARA NAVEGACIÓN ---
-  const [vista, setVista] = useState("inicio"); // Opciones: 'inicio', 'ventas', 'productos'
-
+  // --- ESTADOS ---
+  const [vista, setVista] = useState("inicio"); 
   const [productos, setProductos] = useState([]);
   const [carrito, setCarrito] = useState([]);
   const [pedidos, setPedidos] = useState([]);
   const [productoEditando, setProductoEditando] = useState(null);
   const [mostrarCarrito, setMostrarCarrito] = useState(false);
+  const [busqueda, setBusqueda] = useState(""); 
 
   const esAdmin = usuario?.rol === "ADMIN";
 
   useEffect(() => {
     if (usuario) {
-      cargarDatos();    // Carga productos (Para todos)
-      cargarPedidos();  // Carga pedidos (Para todos, luego filtramos visualmente)
+      cargarDatos();    
+      cargarPedidos();  
     }
-  }, [usuario]); // Ya no necesitas 'esAdmin' aquí
+  }, [usuario]); 
 
-  // --- FUNCIONES (Igual que antes) ---
+  // --- LÓGICA DE FILTRADO ---
+  const productosFiltrados = productos.filter((producto) =>
+    producto.nombre.toLowerCase().includes(busqueda.toLowerCase())
+  );
+
+  // --- FUNCIONES ---
   const cargarDatos = async () => {
     const datos = await obtenerProductos();
     setProductos(datos || []); 
@@ -51,12 +57,20 @@ function App() {
   
   const handleEditar = (p) => { 
       setProductoEditando(p); 
-      // Si editamos, forzamos la vista de "productos" para ver el formulario
       setVista("productos");
       document.querySelector('.contenido-pagina')?.scrollTo({top:0, behavior:'smooth'}); 
   };
   
   const cancelarEdicion = () => setProductoEditando(null);
+
+  // --- NUEVA FUNCIÓN: IMPORTAR PRODUCTOS DEMO ---
+  const handleImportar = async () => {
+    if(window.confirm("¿Quieres descargar productos de prueba? Esto se agregará a tu lista actual.")) {
+        const mensaje = await importarProductosDemo();
+        alert(mensaje);
+        cargarDatos(); // Recargar la lista para ver los nuevos productos
+    }
+  };
 
   const handleComprar = async () => {
     if (carrito.length === 0) return;
@@ -68,7 +82,7 @@ function App() {
   };
 
   const handleLogout = () => {
-      setUsuario(null); setCarrito([]); setPedidos([]); setVista("inicio");
+      setUsuario(null); setCarrito([]); setPedidos([]); setVista("inicio"); setBusqueda("");
   };
 
   if (!usuario) return <Login alIngresar={setUsuario} />;
@@ -81,15 +95,15 @@ function App() {
         onLogout={handleLogout} 
         carritoCount={carrito.length}
         toggleCarrito={() => setMostrarCarrito(true)}
+        onSearch={setBusqueda} 
       />
 
       <div className="main-content-wrapper">
         
-        {/* 2. CONECTAMOS EL SIDEBAR */}
         <Sidebar 
           esAdmin={esAdmin} 
-          vistaActual={vista}        // Le decimos qué botón pintar activo
-          onNavegar={(v) => setVista(v)} // Le damos la función para cambiar
+          vistaActual={vista}        
+          onNavegar={(v) => setVista(v)} 
         />
 
         <main className="contenido-pagina">
@@ -97,20 +111,32 @@ function App() {
                 <Carrito items={carrito} alCerrar={() => setMostrarCarrito(false)} alEliminar={eliminarDelCarrito} alComprar={handleComprar}/>
             )}
 
-            {/* --- 3. CONTENIDO DINÁMICO SEGÚN LA VISTA --- */}
-            
             {/* VISTA: GESTIÓN DE PRODUCTOS (Solo Admin) */}
             {esAdmin && vista === "productos" && (
                 <section className="seccion-admin">
-                    <h2 className="titulo-admin">📦 Gestión de Inventario</h2>
+                    {/* ENCABEZADO CON BOTÓN IMPORTAR (Estilos en CSS) */}
+                    <div className="admin-header">
+                        <h2 className="titulo-admin">📦 Gestión de Inventario</h2>
+                        
+                        <button 
+                            onClick={handleImportar}
+                            className="btn-importar"
+                        >
+                            ☁️ Importar Demo
+                        </button>
+                    </div>
+                    
+                    <hr className="admin-divider"/>
+
                     <Formulario 
                         alGuardar={cargarDatos} 
                         productoEditando={productoEditando} 
                         alCancelar={cancelarEdicion}
                     />
-                    {/* Aquí mostramos también la grilla para ver qué editamos */}
+                    
+                    {/* GRILLA DE PRODUCTOS (Para ver lo que administras) */}
                     <div style={{marginTop: "30px"}}>
-                         {/* Reutilizamos la grilla de abajo */}
+                         {/* Se reutiliza la visualización de abajo, o podrías pegar una tabla aquí si prefieres */}
                     </div>
                 </section>
             )}
@@ -148,11 +174,7 @@ function App() {
             {esAdmin && vista === "dashboard" && (
                 <section className="seccion-admin">
                     <h2 className="titulo-admin">📊 Resumen del Negocio</h2>
-                    
-                    {/* Tarjetas de Estadísticas */}
                     <div className="dashboard-stats" style={{display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "20px", marginBottom: "40px"}}>
-                        
-                        {/* CARD 1: INGRESOS */}
                         <div className="stat-card" style={{background: "white", padding: "20px", borderRadius: "10px", boxShadow: "0 4px 6px rgba(0,0,0,0.05)", borderLeft: "5px solid #27ae60"}}>
                             <h3 style={{fontSize: "0.9rem", color: "#7f8c8d", margin: 0}}>Ingresos Totales</h3>
                             <p style={{fontSize: "2rem", fontWeight: "bold", color: "#2c3e50", margin: "10px 0"}}>
@@ -160,8 +182,6 @@ function App() {
                             </p>
                             <small style={{color: "#27ae60"}}>💰 Dinero real en caja</small>
                         </div>
-
-                        {/* CARD 2: PEDIDOS */}
                         <div className="stat-card" style={{background: "white", padding: "20px", borderRadius: "10px", boxShadow: "0 4px 6px rgba(0,0,0,0.05)", borderLeft: "5px solid #3498db"}}>
                             <h3 style={{fontSize: "0.9rem", color: "#7f8c8d", margin: 0}}>Pedidos Realizados</h3>
                             <p style={{fontSize: "2rem", fontWeight: "bold", color: "#2c3e50", margin: "10px 0"}}>
@@ -169,8 +189,6 @@ function App() {
                             </p>
                             <small style={{color: "#3498db"}}>🛒 Ventas cerradas</small>
                         </div>
-
-                        {/* CARD 3: PRODUCTOS */}
                         <div className="stat-card" style={{background: "white", padding: "20px", borderRadius: "10px", boxShadow: "0 4px 6px rgba(0,0,0,0.05)", borderLeft: "5px solid #f39c12"}}>
                             <h3 style={{fontSize: "0.9rem", color: "#7f8c8d", margin: 0}}>Productos Activos</h3>
                             <p style={{fontSize: "2rem", fontWeight: "bold", color: "#2c3e50", margin: "10px 0"}}>
@@ -179,47 +197,28 @@ function App() {
                             <small style={{color: "#f39c12"}}>📦 En catálogo</small>
                         </div>
                     </div>
-
-                    {/* Tabla Resumida (Últimos 5 pedidos) */}
-                    <h3>⏱️ Actividad Reciente</h3>
-                    <div className="historial-ventas">
-                         {/* Reutilizamos la tabla pero cortamos a solo 5 items */}
-                         <table className="tabla-pedidos">
-                            <thead>
-                                <tr><th>ID</th><th>Fecha</th><th>Total</th></tr>
-                            </thead>
-                            <tbody>
-                                {[...pedidos].reverse().slice(0, 5).map(p => (
-                                    <tr key={p.id}>
-                                        <td>#{p.id}</td>
-                                        <td>{new Date(p.fecha).toLocaleDateString()}</td>
-                                        <td className="total-venta">${p.total}</td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                         </table>
-                    </div>
                 </section>
             )}
 
-            {/* VISTA: INICIO / CATÁLOGO (Visible en 'inicio' o 'productos') */}
+            {/* VISTA: INICIO / CATÁLOGO */}
             {(vista === "inicio" || vista === "productos") && (
                 <>
                     {vista === "inicio" && <h2 className="titulo-admin">🏠 Catálogo de Productos</h2>}
                     
                     <div className="grilla-productos">
-                        {(!productos || productos.length === 0) ? (
+                        {(!productosFiltrados || productosFiltrados.length === 0) ? (
                             <div style={{textAlign: "center", width: "100%", color: "#7f8c8d"}}>
-                                <h2>🤷‍♂️ Catálogo Vacío</h2>
+                                <h2>
+                                    {busqueda ? "🔍 No se encontraron productos" : "🤷‍♂️ Catálogo Vacío"}
+                                </h2>
                             </div>
                         ) : (
-                            (productos || []).map((producto) => (
+                            (productosFiltrados || []).map((producto) => (
                             <div key={producto.id} className="tarjeta">
                                 <img src={producto.imagenUrl || "https://via.placeholder.com/150"} alt={producto.nombre} className="imagen-producto" />
                                 <h3>{producto.nombre}</h3>
                                 <p className="precio">${producto.precio}</p>
                                 <div className="acciones">
-                                    {/* Si estamos en vista PRODUCTOS (admin), mostramos editar. Si es INICIO, solo comprar */}
                                     {esAdmin && vista === "productos" ? (
                                         <>
                                             <button className="btn-editar" onClick={() => handleEditar(producto)}>✏️</button>
@@ -236,38 +235,27 @@ function App() {
                 </>
             )}
 
-            {/* --- VISTAS DE CLIENTE --- */}
-
-            {/* VISTA: MIS COMPRAS */}
+            {/* VISTAS DE CLIENTE */}
             {!esAdmin && vista === "mis-compras" && (
                 <section>
                     <h2 className="titulo-admin">🛍️ Historial de Compras</h2>
-                    
                     <div className="historial-ventas">
-                        {/* Filtramos los pedidos para ver SOLO los míos */}
                         {pedidos.filter(p => p.usuario?.id === usuario.id).length === 0 ? (
                             <div style={{textAlign: "center", padding: "40px"}}>
                                 <h3>Aún no has comprado nada.</h3>
-                                <p>¡Ve a la tienda y date un gusto!</p>
                             </div>
                         ) : (
                             <table className="tabla-pedidos">
-                                <thead>
-                                    <tr><th>Pedido #</th><th>Fecha</th><th>Total</th><th>Productos</th></tr>
-                                </thead>
+                                <thead><tr><th>Pedido #</th><th>Fecha</th><th>Total</th><th>Productos</th></tr></thead>
                                 <tbody>
-                                    {pedidos
-                                        .filter(p => p.usuario?.id === usuario.id) // FILTRO CLAVE
-                                        .map(p => (
+                                    {pedidos.filter(p => p.usuario?.id === usuario.id).map(p => (
                                         <tr key={p.id}>
                                             <td>#{p.id}</td>
                                             <td>{new Date(p.fecha).toLocaleDateString()}</td>
                                             <td className="total-venta">${p.total}</td>
                                             <td>
                                                 <ul className="lista-items-venta">
-                                                    {p.productos.map((prod, i) => (
-                                                        <li key={i}>• {prod.nombre}</li>
-                                                    ))}
+                                                    {p.productos.map((prod, i) => <li key={i}>• {prod.nombre}</li>)}
                                                 </ul>
                                             </td>
                                         </tr>
@@ -279,22 +267,12 @@ function App() {
                 </section>
             )}
 
-            {/* VISTA: MI PERFIL */}
             {!esAdmin && vista === "perfil" && (
                 <section style={{display: "flex", justifyContent: "center"}}>
-                    <div style={{
-                        background: "white", 
-                        padding: "40px", 
-                        borderRadius: "20px", 
-                        boxShadow: "0 10px 25px rgba(0,0,0,0.1)",
-                        textAlign: "center",
-                        maxWidth: "400px",
-                        width: "100%"
-                    }}>
+                    <div style={{background: "white", padding: "40px", borderRadius: "20px", boxShadow: "0 10px 25px rgba(0,0,0,0.1)", textAlign: "center", maxWidth: "400px", width: "100%"}}>
                         <div style={{fontSize: "4rem", marginBottom: "10px"}}>👤</div>
                         <h2 style={{color: "#2c3e50", margin: "0"}}>{usuario.nombre}</h2>
                         <p style={{color: "#7f8c8d", marginBottom: "20px"}}>{usuario.email}</p>
-                        
                         <div style={{background: "#f1f2f6", padding: "15px", borderRadius: "10px", textAlign: "left"}}>
                             <p><strong>Rol:</strong> Cliente</p>
                             <p><strong>Miembro desde:</strong> 2026</p>
