@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 // IMPORTANTE: Agregamos 'importarProductosDemo' a los imports
-import { obtenerProductos, eliminarProducto, crearPedido, obtenerPedidos, importarProductosDemo } from "./services/productoService";
+import { obtenerProductos, eliminarProducto, crearPedido, obtenerPedidos, importarProductosDemo, toggleEstadoProducto } from "./services/productoService";
 import Formulario from "./components/Formulario";
 import Carrito from "./components/Carrito";
 import Login from "./components/Login";
@@ -29,10 +29,18 @@ function App() {
     }
   }, [usuario]); 
 
-  // --- LÓGICA DE FILTRADO ---
-  const productosFiltrados = productos.filter((producto) =>
-    producto.nombre.toLowerCase().includes(busqueda.toLowerCase())
-  );
+  // --- LÓGICA DE FILTRADO MEJORADA ---
+  const productosFiltrados = productos.filter((producto) => {
+      // 1. Filtro por texto (Buscador)
+      const coincideBusqueda = producto.nombre.toLowerCase().includes(busqueda.toLowerCase());
+      
+      // 2. Filtro por Estado (Soft Delete)
+      // Si es ADMIN: Ve todo (activos e inactivos)
+      // Si es CLIENTE: Solo ve los activos (producto.activo !== false)
+      const esVisible = esAdmin ? true : (producto.activo !== false);
+
+      return coincideBusqueda && esVisible;
+  });
 
   // --- FUNCIONES ---
   const cargarDatos = async () => {
@@ -53,6 +61,11 @@ function App() {
 
   const handleEliminar = async (id) => {
     if(window.confirm("¿Borrar producto?")) { await eliminarProducto(id); cargarDatos(); }
+  };
+
+  const handleToggleEstado = async (id) => {
+      await toggleEstadoProducto(id);
+      cargarDatos(); // Recargamos para ver el cambio de color/estado
   };
   
   const handleEditar = (p) => { 
@@ -214,15 +227,41 @@ function App() {
                             </div>
                         ) : (
                             (productosFiltrados || []).map((producto) => (
-                            <div key={producto.id} className="tarjeta">
+                            <div 
+                                key={producto.id} 
+                                className="tarjeta"
+                                // Si está inactivo y soy admin, lo mostramos medio transparente
+                                style={{ opacity: (producto.activo === false) ? 0.6 : 1 }}
+                            >
                                 <img src={producto.imagenUrl || "https://via.placeholder.com/150"} alt={producto.nombre} className="imagen-producto" />
-                                <h3>{producto.nombre}</h3>
+                                
+                                {/* Título con indicador si está inactivo */}
+                                <h3>
+                                    {producto.nombre} 
+                                    {producto.activo === false && <span style={{color: "red", fontSize:"0.8rem"}}> (Inactivo)</span>}
+                                </h3>
+                                
                                 <p className="precio">${producto.precio}</p>
+                                
                                 <div className="acciones">
                                     {esAdmin && vista === "productos" ? (
                                         <>
                                             <button className="btn-editar" onClick={() => handleEditar(producto)}>✏️</button>
-                                            <button className="btn-eliminar" onClick={() => handleEliminar(producto.id)}>🗑️</button>
+                                            
+                                            {/* BOTÓN DE ACTIVAR / DESACTIVAR */}
+                                            <button 
+                                                onClick={() => handleToggleEstado(producto.id)}
+                                                style={{
+                                                    background: (producto.activo === false) ? "#27ae60" : "#7f8c8d", 
+                                                    color: "white"
+                                                }}
+                                                title={producto.activo === false ? "Volver a activar" : "Deshabilitar compra"}
+                                            >
+                                                {producto.activo === false ? "✅" : "🚫"}
+                                            </button>
+
+                                            {/* Opcional: Mantener el borrar físico si quieres, o quitarlo */}
+                                            {/* <button className="btn-eliminar" onClick={() => handleEliminar(producto.id)}>🗑️</button> */}
                                         </>
                                     ) : (
                                         <button onClick={() => agregarAlCarrito(producto)}>🛒 Agregar</button>

@@ -17,4 +17,5 @@ public class Producto {
     private String nombre;
     private Double precio;
     private String imagenUrl; // Guardaremos la URL de la imagen
+    private Boolean activo = true; // Nuevo campo para indicar si el producto está activo
 }
