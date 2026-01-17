@@ -1,10 +1,11 @@
+/* Estilos para la página de inicio de sesión */
 .login-container {
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
     width: 100vw;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #6a0404 0%, #1e175e 100%);
     position: fixed;
     top: 0;
     left: 0;
@@ -27,10 +28,11 @@
     100% { transform: translate(50px, 50px); }
 }
 
+
 .login-box {
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(10px);
-    padding: 50px 45px;
+    padding: 100px 45px;
     border-radius: 20px;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3), 
                 0 0 0 1px rgba(255, 255, 255, 0.1);
@@ -44,6 +46,7 @@
     margin: 0 auto;
 }
 
+/* Efecto hover para levantar la caja de inicio de sesión */
 .login-box:hover {
     transform: translateY(-5px);
     box-shadow: 0 25px 70px rgba(0, 0, 0, 0.4);
@@ -84,7 +87,7 @@
 .btn-login {
     width: 100%;
     padding: 14px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #20243a 0%, #764ba2 100%);
     color: white;
     border: none;
     border-radius: 12px;
@@ -98,7 +101,7 @@
 
 .btn-login:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+    box-shadow: 0 6px 20px rgba(23, 54, 190, 0.6);
 }
 
 .btn-login:active {
@@ -107,7 +110,7 @@
 
 .toggle-text {
     margin-top: 25px;
-    color: #718096;
+    color: #28436b;
     cursor: pointer;
     font-size: 0.9rem;
     text-decoration: none;
@@ -116,6 +119,6 @@
 }
 
 .toggle-text:hover {
-    color: #667eea;
+    color: #920b0b;
     transform: scale(1.02);
 }

@@ -65,7 +65,6 @@ public class ProductoController {
         RestTemplate restTemplate = new RestTemplate();
 
         DummyResponse respuesta = restTemplate.getForObject(url, DummyResponse.class);
-
         if (respuesta == null || respuesta.products == null) return "Error al conectar con la API";
 
         List<Producto> nuevosProductos = new ArrayList<>();
@@ -75,12 +74,13 @@ public class ProductoController {
             p.setNombre(fake.title);
             p.setPrecio(fake.price);
             p.setImagenUrl(fake.thumbnail);
+            p.setCategoria(fake.category); // <--- AQUI GUARDAMOS LA CATEGORIA
 
             nuevosProductos.add(p);
         }
 
         productoRepository.saveAll(nuevosProductos);
-        return "¡Éxito! Se agregaron " + nuevosProductos.size() + " productos nuevos a tu catálogo.";
+        return "¡Éxito! Se agregaron " + nuevosProductos.size() + " productos con categorías.";
     }
 
     // Clases auxiliares para leer la respuesta de DummyJSON
@@ -92,5 +92,6 @@ public class ProductoController {
         public String title;
         public Double price;
         public String thumbnail;
+        public String category;
     }
 }

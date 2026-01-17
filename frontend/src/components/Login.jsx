@@ -18,7 +18,7 @@ function Login({ alIngresar }) {
         alert("¡Registro exitoso! Ahora inicia sesión.");
         setEsRegistro(false); // Lo mandamos al login
       } else {
-        alert("Error al registrar. Quizás el correo ya existe.");
+        alert("Error al registrar. El correo ya existe.");
       }
     } else {
       // --- LOGIN ---
@@ -39,7 +39,7 @@ function Login({ alIngresar }) {
         <form onSubmit={handleSubmit}>
           {esRegistro && (
             <input 
-              type="text" placeholder="Tu Nombre" 
+              type="text" placeholder="Nombres y Apellidos" 
               value={nombre} onChange={(e) => setNombre(e.target.value)} required 
             />
           )}

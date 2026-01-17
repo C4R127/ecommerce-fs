@@ -8,7 +8,7 @@ function Navbar({ usuario, onLogout, carritoCount, toggleCarrito, onSearch }) {
     <nav className="navbar">
       <div className="navbar-brand">
         <span className="logo-icon">🛍️</span>
-        <h1>Tienda de {usuario.nombre}</h1>
+        <h1>All Store</h1>
       </div>
 
       {/* NUEVO: BARRA DE BÚSQUEDA CENTRAL */}
