@@ -19,4 +19,7 @@ public class Producto {
     private String imagenUrl; // Guardaremos la URL de la imagen
     private Boolean activo = true; // Nuevo campo para indicar si el producto está activo
     private String categoria;
+    // Nuevo campo para la descripción del producto
+    @jakarta.persistence.Column(length = 1000)
+    private String descripcion;
 }

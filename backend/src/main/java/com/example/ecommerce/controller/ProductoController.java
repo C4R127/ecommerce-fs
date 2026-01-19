@@ -76,6 +76,7 @@ public class ProductoController {
             p.setImagenUrl(fake.thumbnail);
             p.setCategoria(fake.category); // <--- AQUI GUARDAMOS LA CATEGORIA
 
+            p.setDescripcion(fake.description);
             nuevosProductos.add(p);
         }
 
@@ -93,5 +94,6 @@ public class ProductoController {
         public Double price;
         public String thumbnail;
         public String category;
+        public String description;
     }
 }
