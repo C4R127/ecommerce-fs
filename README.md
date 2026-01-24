@@ -62,7 +62,7 @@ Crea una base de datos vacía en MySQL:
 'CREATE DATABASE ecommerce_db;'
 
 
-#### 2. Backend (Spring Boot)
+## 2. Backend (Spring Boot)
 Clona el repositorio.
 
 Abre la carpeta backend en IntelliJ IDEA o tu IDE preferido.
@@ -76,7 +76,7 @@ spring.datasource.password=TU_CONTRASEÑA
 spring.jpa.hibernate.ddl-auto=update
 ~~~
 
-### 3. Frontend (React)
+## 3. Frontend (React)
 1. Abre una terminal en la carpeta frontend.
 
 2. Instala las dependencias:
@@ -93,7 +93,7 @@ npm run dev
 
 4. Abre tu navegador en http://localhost:5173.
 
-### 📡 Endpoints Principales (API REST)
+## 📡 Endpoints Principales (API REST)
 
 
 | Método | Endpoint | Descripción |
@@ -103,7 +103,7 @@ npm run dev
 | POST | /api/productos/importar | Importar datos desde DummyJSON |
 | POST | /api/pedidos | Crear una nueva orden de compra |
 
-### 🌟 Futuras Mejoras
+## 🌟 Futuras Mejoras
 * [ ] Integración de pasarela de pagos real (PayPal/Stripe).
 
 * [ ] Autenticación segura con JWT y Spring Security.
@@ -112,7 +112,7 @@ npm run dev
 
 * [ ] Despliegue en la nube (AWS/Render).
 
-### ✒️ Autor
+## ✒️ Autor
 
 Carlos Eduardo Barra Cconcho
 
