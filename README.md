@@ -58,9 +58,9 @@ Sigue estos pasos para correr el proyecto en tu máquina local:
 ### 1. Base de Datos
 Crea una base de datos vacía en MySQL:
 
-
-'CREATE DATABASE ecommerce_db;'
-
+~~~
+CREATE DATABASE ecommerce_db;
+~~~
 
 ## 2. Backend (Spring Boot)
 Clona el repositorio.
