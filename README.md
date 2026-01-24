@@ -96,12 +96,12 @@ npm run dev
 ### 📡 Endpoints Principales (API REST)
 
 - - -
-Método,Endpoint,Descripción
-GET,/api/productos,Obtener todos los productos
-POST,/api/productos,Crear nuevo producto
-PUT,/api/productos/{id}/estado,Activar/Desactivar producto (Soft Delete)
-POST,/api/productos/importar,Importar datos desde DummyJSON
-POST,/api/pedidos,Crear una nueva orden de compra
+| Método | Endpoint | Descripción |
+| GET | api/productos | Obtener todos los productos |
+| POST | /api/productos | Crear nuevo producto |
+| PUT | /api/productos/{id}/estado | Activar/Desactivar producto (Soft Delete) |
+| POST | /api/productos/importar | Importar datos desde DummyJSON |
+| POST | /api/pedidos | Crear una nueva orden de compra |
 - - - 
 
 ### 🌟 Futuras Mejoras
