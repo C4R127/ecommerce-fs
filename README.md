@@ -97,7 +97,7 @@ npm run dev
 
 | Método | Endpoint | Descripción |
 | :--- | :--- | :--- |
-| GET | api/productos | Obtener todos los productos |
+| GET | /api/productos | Obtener todos los productos |
 | POST | /api/productos | Crear nuevo producto |
 | PUT | /api/productos/{id}/estado | Activar/Desactivar producto (Soft Delete) |
 | POST | /api/productos/importar | Importar datos desde DummyJSON |
